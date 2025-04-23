@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  medical_records_ms:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://sandoval:salessa@8bcc30a1192f:5432/medical_records
+      - REDIS_HOST=redis
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    networks:
+      - postgres_default
+
+  redis:
+    image: redis:7
+    networks:
+      - existing_network
+
+  celery:
+    build: .
+    command: celery -A app.workers.tasks.app worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://sandoval:salessa@8bcc30a1192f:5432/medical_records
+      - REDIS_HOST=redis
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    networks:
+      - existing_network
+
+networks:
+  existing_network:
+    external: true
+    name: postgres_default
