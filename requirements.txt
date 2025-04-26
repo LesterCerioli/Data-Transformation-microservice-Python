@@ -13,5 +13,5 @@ aioredis==2.0.1
 httpx==0.26.0
 gunicorn==21.2.0
 uvloop==0.19.0
-orjson==3.9.10
+orjson==3.9.15
 python-dotenv==1.0.0
